@@ -36,7 +36,7 @@ Suppose you have a transcript file already. Simply run `python bandori_wiki_stor
 - `-readname XXX` tells the program the name of the transcript file to read. By default, it is `transcript`.
 - `-writename XXX` tells the program what to name the output file. By default, it is `wiki`.
 
-#### Writing a transcript file
+### Writing a transcript file
 Transcript files are `.txt` files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners or a change of speaker.
 - **Locations:** start a new line, and write the location name followed immediately by a slash (`/`). 
 - **New speaker:** start a new line, and write either a single or double slash (`/` or `//`) followed by the speaker.
