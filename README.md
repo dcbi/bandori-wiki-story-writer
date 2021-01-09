@@ -31,7 +31,7 @@ will turn into the following wiki-code
 Suppose you have a transcript file already. Simply run `python bandori_wiki_story_writer.py`. You can include the following optional arguments:
 - `-abbrev` turns on recognition of abbreviations for character names when indicating speaker (but it assumes it is universal, i.e. you shouldn't write a transcript with a mix of abbreviated names and non-abbreviated names).
 - `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
-- `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the following arguments.
+- `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the arguments below this one in this list.
 - `-path XXX` sets the parent directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute or relatative to the current working directory. By default, it is the parent directory of the program itself.
 - `-readname XXX` tells the program the name of the transcript file to read. By default, it is `transcript`.
 - `-writename XXX` tells the program what to name the output file. By default, it is `wiki`.
