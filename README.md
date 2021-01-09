@@ -24,7 +24,6 @@ will turn into the following wiki-code
 {{dialog|others|...!|Ako, Rinko, and Yukina}}
 ```
 ### Dependencies
-- pathlib (optional, just take it out and uncomment `import sys, os` and the line right after)
 - pyqt, pyqtgraph (optional, only if you want to use UI)
 
 ### Example Usage
