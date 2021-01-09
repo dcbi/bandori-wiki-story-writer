@@ -1,9 +1,8 @@
 import argparse
 import pathlib
-#import sys, os.path
+import sys, os.path
 
-#directory = os.path.dirname(sys.argv[0])
-directory = str(pathlib.Path(__file__).parent.absolute())
+directory = os.path.dirname(sys.argv[0])
 
 parser = argparse.ArgumentParser(description='Reads transcript file and writes file for wiki.')
 
