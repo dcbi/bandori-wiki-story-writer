@@ -1,9 +1,8 @@
 import argparse
 import pathlib
-#import sys, os.path
+import sys, os.path
 
-#directory = os.path.dirname(sys.argv[0])
-directory = str(pathlib.Path(__file__).parent.absolute())
+directory = os.path.dirname(sys.argv[0])
 
 parser = argparse.ArgumentParser(description='Reads transcript file and writes file for wiki.')
 
@@ -81,7 +80,6 @@ def main(f1, f2, expand):
 	if not skip[1] == 0: print(str(skip[1]) + '\nline(s) skipped. Fix output file manually.')
 
 if args.ui:
-	import sys
 	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout,
 	    QFileDialog)
 	from pyqtgraph.Qt import QtGui, QtCore
