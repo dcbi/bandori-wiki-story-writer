@@ -39,8 +39,13 @@ Suppose you have a transcript file already. Simply run `python bandori_wiki_stor
 #### Writing a transcript file
 Transcript files are `.txt` files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners or a change of speaker.
 - **Locations:** start a new line, and write the location name followed immediately by a slash (`/`). 
-- **New speaker:** start a new line, and write either a single or double slash (`/` or `//`) followed by the speaker. Single slash is for the main characters (those of the 25 bands and Marina). Double slash is for anything else. They can be unvoiced characters or groups of main characters or a main character but in a special situation (e.g. on the phone). The speaker does not have to be indicated before every line of dialogue, only when there is a change of speaker.
+- **New speaker:** start a new line, and write either a single or double slash (`/` or `//`) followed by the speaker.
+  - Single slash is for the main characters (those of the 25 bands and Marina). It doesn't matter if they're capitalized or not. These can also be abbrevations. See below for the abbreviations. You can change them to your own if you want. They're just hard-coded in for now.
+  - Double slash is for anything else. They can be unvoiced characters or groups of main characters or a main character but in a special situation (e.g. on the phone). The speaker does not have to be indicated before every line of dialogue, only when there is a change of speaker. In this case, character names cannot be abbreviated. You have to write them all out, with proper capitalization.
 - **Dialogue:** start a new line (immediately below line indicating the speaker if a new speaker has just been indicated) and type the dialogue exactly is, nothing added.
 - **Blank space:** to insert `<br />`, start a new line and type space followed by a single slash. This can represent when the story skips a brief moment of time, or whatever it may be.
 - **Mentions of player character:** whenever the player character's name is mentioned, replace it, and the "-san" suffix after it, with `[you]`. In the wiki-code output file, this will become `{{USERNAME}}`.
+
 Be careful that slashes doesn't appear in any of the dialogue lines, names of speakers, or names of locations. If they do, there is some clunky error handling that I tried to incorporate, which asks for user input to directly tell the program what to do. Also be wary of special symbols, such as those in the emotes that Rinko uses when typing. The program might not recognize them and raise an error.
+
+The following abbreviations are used: ['kas', 'tae', 'rim', 'say', 'ari', 'y', 's', 'l', 'a', 'r', 'aya', 'hin', 'chi', 'may', 'eve', 'ran', 'moc', 'him', 'tom', 'tsu', 'kok', 'kao', 'hag', 'kan', 'mis', 'mar']. You can probably tell which band is my favorite.
