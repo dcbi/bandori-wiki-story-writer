@@ -24,18 +24,20 @@ will turn into the following wiki-code
 {{dialog|others|...!|Ako, Rinko, and Yukina}}
 ```
 ### Dependencies
-- pyqt, pyqtgraph (optional, only if you want to use UI)
+(optional, only if you want to use UI)
+- pyqt
+- pyqtgraph 
 
 ### Example Usage
-Suppose you have a transcript file already. Simply run `python bandori_wiki_story_writer.py`. You can include the following optional arguments:
-- `-abbrev` turns on recognition of abbreviations for character names when indicating speaker (but it assumes it is universal, i.e. you shouldn't write a transcript with a mix of abbreviated names and non-abbreviated names).
-- `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
-- `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the arguments below this one in this list.
+Suppose you have a transcript file already. As long as it is in the same location as the program and titled `transcript.txt`, simply run `python bandori_wiki_story_writer.py`. To loosen those restrictions, include the following optional arguments:
 - `-path folder_1\folder_2` or `-path C:\Users\ursul\Desktop` sets the parent directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute or relatative to the current working directory. By default, it is the parent directory of the program itself.
 - `-readname transcript_file_name` tells the program the name of the transcript file to read. By default, it is `transcript`.
 - `-writename output_file_name` tells the program what to name the output file. By default, it is `wiki`.
 
-There are two versions of the code. The one with the label "base" at the end does not have the `-abbrev`, `-expand`, and `-ui` features.
+There are two versions of the code. The one with the label "base" at the end does not have the following features. For the main code, you can also run it with the following arguments:
+- `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the arguments in the list above. This requires the packages listed above in the **Dependencies** list.
+- `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
+- `-abbrev` turns on recognition of abbreviations for character names when indicating speaker (but it assumes it is universal, i.e. you shouldn't write a transcript with a mix of abbreviated names and non-abbreviated names).
 
 ### Writing a transcript file
 Transcript files are `.txt` files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners or a change of speaker.
