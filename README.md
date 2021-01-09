@@ -1,5 +1,5 @@
 # bandori-wiki-story-writer
-Python script for turning transcripts of event/card stories from Bandori into wiki-code (for use on [Bandori Wikia](https://bandori.fandom.com)).
+Python code for turning transcripts of event/card stories from Bandori into wiki-code (for use on [Bandori Wikia](https://bandori.fandom.com)).
 
 #### Example
 The following transcript
