@@ -1,5 +1,4 @@
 import argparse
-import pathlib
 import sys, os.path
 
 directory = os.path.dirname(sys.argv[0])
