@@ -1,11 +1,11 @@
 import argparse
-import sys, os.path
+from pathlib import Path
 
-directory = os.path.dirname(sys.argv[0])
+parent_dir = str(Path(__file__).parent.absolute())
 
-parser = argparse.ArgumentParser(description='Reads transcript file and writes file for wiki.')
+parser = argparse.ArgumentParser()
 
-parser.add_argument('-path', help="parent path of file to read from, default='RUNNING FILE DIRECTORY'", default=directory)
+parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
 parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
 parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wiki')
 parser.add_argument('-ui', action='store_true')
@@ -14,12 +14,12 @@ parser.add_argument('-expand', action='store_true')
 
 args = parser.parse_args()
 
-names = ['kasumi', 'tae', 'rimi', 'saaya', 'arisa', 'yukina', 'sayo', 'lisa', 'ako', 'rinko', 'aya', 'hina', 'chisato', 'maya', 'eve', 'ran', 'moca', 'himari', 'tomoe', 'tsugumi', 'kokoro', 'kaoru', 'hagumi', 'kanon', 'misaki', 'marina']
+names = ['kasumi', 'rimi', 'saaya', 'arisa', 'yukina', 'sayo', 'lisa', 'ako', 'rinko', 'hina', 'chisato', 'maya', 'moca', 'himari', 'tomoe', 'tsugumi', 'kokoro', 'kaoru', 'hagumi', 'kanon', 'misaki', 'marina']
 
-short = ['kas', 'tae', 'rim', 'say', 'ari', 'y', 's', 'l', 'a', 'r', 'aya', 'hin', 'chi', 'may', 'eve', 'ran', 'moc', 'him', 'tom', 'tsu', 'kok', 'kao', 'hag', 'kan', 'mis', 'mar']
+short = ['kas', 'rim', 'say', 'ari', 'y', 's', 'l', 'a', 'r', 'hin', 'chi', 'may', 'moc', 'him', 'tom', 'tsu', 'kok', 'kao', 'hag', 'kan', 'mis', 'mar']
 
 def process(string, abbrev):
-	if abbrev:
+	if abbrev and string in short:
 		n = short.index(string)
 		return names[n]
 	else: return string
@@ -44,9 +44,9 @@ def main(f1, f2, expand):
 					if tag[1] == '':
 						writeNew = '{{dialog|others|[line]|' + line.strip().replace('/','') + '}}\n'
 					else:
-						writeNew = '{{dialog|' + process(tag[1].lower(), args.abbrev) + '|[line]}}\n'
+						writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
 				else:
-					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
+					if tag[1].strip() == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash()
 				continue
 			except Slash:
@@ -79,6 +79,7 @@ def main(f1, f2, expand):
 	if not skip[1] == 0: print(str(skip[1]) + '\nline(s) skipped. Fix output file manually.')
 
 if args.ui:
+	import sys
 	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout,
 	    QFileDialog)
 	from pyqtgraph.Qt import QtGui, QtCore
