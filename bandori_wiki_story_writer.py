@@ -14,21 +14,16 @@ parser.add_argument('-expand', action='store_true')
 
 args = parser.parse_args()
 
-names = ['kasumi', 'rimi', 'saaya', 'arisa', 'yukina', 'sayo', 'lisa', 'ako', 'rinko', 'hina', 'chisato', 'maya', 'moca', 'himari', 'tomoe', 'tsugumi', 'kokoro', 'kaoru', 'hagumi', 'kanon', 'misaki', 'marina']
+short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
 
-short = ['kas', 'rim', 'say', 'ari', 'y', 's', 'l', 'a', 'r', 'hin', 'chi', 'may', 'moc', 'him', 'tom', 'tsu', 'kok', 'kao', 'hag', 'kan', 'mis', 'mar']
-
-def process(string, abbrev):
-	if abbrev and string in short:
-		n = short.index(string)
-		return names[n]
-	else: return string
+def process(name, abbrev):
+	if abbrev: return short[name]
+	else: return name
 
 class Slash(Exception): pass
 
 def main(f1, f2, expand):
-	if expand:
-		f2.write('<div class="mw-collapsible mw-collapsed">\n')
+	if expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
 	skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
 
@@ -38,13 +33,10 @@ def main(f1, f2, expand):
 		if '/' in line:
 			try:
 				tag = line.split('/')
-				if tag[0] == ' ':
-					f2.write('<br />\n')
+				if tag[0] == ' ': f2.write('<br />\n')
 				elif tag[0] == '':
-					if tag[1] == '':
-						writeNew = '{{dialog|others|[line]|' + line.strip().replace('/','') + '}}\n'
-					else:
-						writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
+					if tag[1] == '': writeNew = '{{dialog|others|[line]|' + line.strip().replace('/','') + '}}\n'
+					else: writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
 				else:
 					if tag[1].strip() == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash()
