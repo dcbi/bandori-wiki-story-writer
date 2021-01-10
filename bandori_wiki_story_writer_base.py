@@ -1,11 +1,11 @@
 import argparse
-import sys, os.path
+from pathlib import Path
 
-directory = os.path.dirname(sys.argv[0])
+parent_dir = str(Path(__file__).parent.absolute())
 
-parser = argparse.ArgumentParser(description='Reads transcript file and writes file for wiki.')
+parser = argparse.ArgumentParser()
 
-parser.add_argument('-path', help="path of file to read from, default='RUNNING FILE DIRECTORY'", default=directory)
+parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
 parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
 parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wiki')
 
