@@ -33,7 +33,7 @@ Suppose you have a transcript file already. As long as it is in the same locatio
 - `-readname file_name` tells the program the name of the transcript file to read. The default is "transcript".
 - `-writename file_name` tells the program what to name the output file. The default is "wiki".
 
-There are two versions of the code. The one with the label "base" at the end does not have the following features. For the main code, you can also run it with the following arguments:
+There are two versions of the code. The one with the label "base" at the end does not have the following features, but the main code does. They are activated by passing the following arguments:
 - `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the arguments in the list above. This requires the packages listed above in the **Dependencies** list.
 - `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
 - `-abbrev` turns on recognition of abbreviations for character names when indicating a speaker. This mode applies universally, i.e. don't write a transcript with a mix of abbreviated and non-abbreviated names (or at least make the abbreviation to be just the original name). The abbreviations are hard-coded in.
