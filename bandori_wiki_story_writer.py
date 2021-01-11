@@ -16,13 +16,13 @@ args = parser.parse_args()
 
 short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
 
-def process(name, abbrev):
-	if abbrev: return short[name]
+def process(name, abb):
+	if abb: return short[name]
 	else: return name
 
 class Slash(Exception): pass
 
-def main(f1, f2, expand):
+def main(f1, f2, abb, expand):
 	if expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
 	skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
@@ -42,7 +42,7 @@ def main(f1, f2, expand):
 					if tag[1] == '':
 						writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
 					else:
-						writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
+						writeNew = '{{dialog|' + process(tag[1].strip().lower(), abb) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
@@ -80,7 +80,7 @@ def main(f1, f2, expand):
 if args.ui:
 	import sys
 	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout,
-	    QFileDialog)
+	    QFileDialog, QCheckBox)
 	from pyqtgraph.Qt import QtGui, QtCore
 	from PyQt5.QtGui import QIcon
 
@@ -109,6 +109,9 @@ if args.ui:
 			self.writeFileNameLabel = QLabel('Name of file to write')
 			self.writeFileNameEdit = QLineEdit(self)
 
+			self.abbreviation = QCheckBox('Use abbreviations')
+			self.expand = QCheckBox('Include expand wrapper')
+
 			self.startButton = QPushButton('Run', self)
 			self.startButton.clicked.connect(self.start)
 			self.stopButton = QPushButton('Exit', self)
@@ -125,13 +128,16 @@ if args.ui:
 			vbox.addLayout(fileloadbox)
 			vbox.addWidget(self.writeFileNameLabel)
 			vbox.addWidget(self.writeFileNameEdit)
+			vbox.addWidget(self.abbreviation)
+			vbox.addWidget(self.expand)
 
-			hbox = QHBoxLayout(self)
-			hbox.addStretch(1)
-			hbox.addWidget(self.stopButton)
-			hbox.addWidget(self.startButton)
-			hbox.addStretch()
-			vbox.addLayout(hbox)
+			buttonsbox = QHBoxLayout(self)
+			buttonsbox.addStretch(1)
+			buttonsbox.addWidget(self.stopButton)
+			buttonsbox.addWidget(self.startButton)
+			buttonsbox.addStretch()
+
+			vbox.addLayout(buttonsbox)
 			vbox.addStretch()
 
 			mainhbox.addLayout(vbox)
@@ -150,7 +156,7 @@ if args.ui:
 
 		def start(self):
 			readfile = self.fileLoadEdit.text()
-			p = str(pathlib.Path(readfile).parent) + '\\'
+			p = str(Path(readfile).parent) + '\\'
 
 			if self.writeFileNameEdit.text() == '':
 				writefile = p + 'wiki.txt'
@@ -159,7 +165,7 @@ if args.ui:
 
 			f1 = open(readfile, 'r')
 			f2 = open(writefile, 'w')
-			main(f1, f2, args.expand)
+			main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
 			f1.close()
 			f2.close()
 			print('Read: ' + readfile.replace('/','\\') + '\nWrite: ' + writefile)
@@ -173,6 +179,6 @@ if args.ui:
 else:
 	f1 = open(args.path + '\\' + args.readname + '.txt', 'r', encoding='utf-8')
 	f2 = open(args.path + '\\' + args.writename + '.txt', 'w', encoding='utf-8')
-	main(f1, f2, args.expand)
+	main(f1, f2, args.abbrev, args.expand)
 	f1.close()
 	f2.close()
