@@ -55,4 +55,13 @@ Be careful that slashes doesn't appear in any of the dialogue lines, names of sp
 
 The number of times it appears will be displayed.
 
-The following abbreviations are used: ['kas', 'tae', 'rim', 'say', 'ari', 'y', 's', 'l', 'a', 'r', 'aya', 'hin', 'chi', 'may', 'eve', 'ran', 'moc', 'him', 'tom', 'tsu', 'kok', 'kao', 'hag', 'kan', 'mis', 'mar']. You can probably tell which band is my favorite.
+The following abbreviations are used: 
+```
+{'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa',
+'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko',
+'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve',
+'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi',
+'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki',
+'mar':'marina'}
+```
+You can probably tell which band is my favorite.
