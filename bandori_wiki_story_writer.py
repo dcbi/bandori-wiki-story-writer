@@ -30,17 +30,24 @@ def main(f1, f2, expand):
 	writeNew = ''
 
 	for line in f1:
-		if '/' in line:
+		l = line.strip()
+		if l == '':
+			f2.write('<br />\n')
+			continue
+
+		elif '/' in l:
 			try:
-				tag = line.split('/')
-				if tag[0] == ' ': f2.write('<br />\n')
-				elif tag[0] == '':
-					if tag[1] == '': writeNew = '{{dialog|others|[line]|' + line.strip().replace('/','') + '}}\n'
-					else: writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
+				tag = l.split('/')
+				if tag[0] == '':
+					if tag[1] == '':
+						writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
+					else:
+						writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
 				else:
-					if tag[1].strip() == '': f2.write('{{loc|' + tag[0] + '}}\n')
-					else: raise Slash()
+					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
+					else: raise Slash
 				continue
+
 			except Slash:
 				print('\nDetected possible slash "/" in dialog or loc text.')
 				print('LINE: ' + line.strip())
@@ -49,7 +56,7 @@ def main(f1, f2, expand):
 					f2.write(skip[0])
 					skip[1] += 1
 				elif cont == '1':
-					f2.write('{{loc|' + line[:len(line)-1] + '}}\n')
+					f2.write('{{loc|' + line.strip()[:len(line)-1] + '}}\n')
 				elif cont == '2':
 					f2.write( writeNew.replace('[line]', line.strip().replace('[you]', '{{USERNAME}}-san')) )
 				else:
@@ -68,7 +75,7 @@ def main(f1, f2, expand):
 
 	if expand: f2.write('</div>')
 
-	if not skip[1] == 0: print(str(skip[1]) + '\nline(s) skipped. Fix output file manually.')
+	if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
 
 if args.ui:
 	import sys
