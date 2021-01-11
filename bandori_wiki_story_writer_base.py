@@ -28,7 +28,7 @@ for line in f1:
 			if tag[1] == '':
 				writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
 			else:
-				writeNew = '{{dialog|' + process(tag[1].strip().lower(), args.abbrev) + '|[line]}}\n'
+				writeNew = '{{dialog|' + tag[1].lower() + '|[line]}}\n'
 		else:
 			if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 		continue
