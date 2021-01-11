@@ -25,7 +25,7 @@ will turn into the following wiki-code
 ```
 ### Dependencies
 - pathlib (built-in for recent versions of Python)
-- pyqt and pyqtgraph (optional, only if you want to use UI)
+- PyQt5 (optional)
 
 ### Example Usage
 Suppose you have a transcript file already. As long as it is in the same location as the program and titled "transcript(.txt)", simply run `python bandori_wiki_story_writer.py`. To loosen those restrictions, include any of the following optional arguments:
@@ -34,7 +34,7 @@ Suppose you have a transcript file already. As long as it is in the same locatio
 - `-writename file_name` tells the program what to name the output file. The default is "wiki".
 
 There are two versions of the code. The one with the label "base" at the end does not have the following features, but the main code does. They are activated by passing the following arguments:
-- `-ui` opens up a window with a graphical user interface. If you open this, you don't need to enter the arguments in the list above. This requires the packages listed above in the **Dependencies** list.
+- `-ui` opens up a window with a graphical user interface. If you do this, you don't need to pass any of the arguments below or any of those in the list above. This requires the PyQt5 package.
 - `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
 - `-abbrev` turns on recognition of abbreviations for character names when indicating a speaker. This mode applies universally, i.e. don't write a transcript with a mix of abbreviated and non-abbreviated names (or at least make the abbreviation to be just the original name). The abbreviations are hard-coded in.
 
