@@ -42,7 +42,7 @@ def main(f1, f2, abb, expand):
 					if tag[1] == '':
 						writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
 					else:
-						writeNew = '{{dialog|' + process(tag[1].strip().lower(), abb) + '|[line]}}\n'
+						writeNew = '{{dialog|' + process(tag[1].lower(), abb) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
@@ -79,10 +79,8 @@ def main(f1, f2, abb, expand):
 
 if args.ui:
 	import sys
-	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout,
-	    QFileDialog, QCheckBox)
-	from pyqtgraph.Qt import QtGui, QtCore
-	from PyQt5.QtGui import QIcon
+	from PyQt5 import QtGui, QtCore
+	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QFileDialog, QCheckBox)
 
 	writeFileName = None
 
