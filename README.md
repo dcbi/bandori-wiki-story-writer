@@ -28,18 +28,20 @@ will turn into the following wiki-code
 - PyQt5 (optional)
 
 ### Example Usage
-Suppose you have a transcript file already. As long as it is in the same location as the program and titled "transcript(.txt)", simply run `python bandori_wiki_story_writer.py`. To loosen those restrictions, include any of the following optional arguments:
-- `-path folder` sets the parent directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute (e.g. "C:\Users\ursul\Desktop") or relatative to the current working directory (e.g. "Documents\folder"). The default is the parent directory of the program itself.
+Suppose you have a transcript already written. As long as it is in the same location as the file containing the code and titled "transcript", simply run `python bandori_wiki_story_writer.py`. To loosen those restrictions, include any of the following optional arguments:
+- `-path folder` sets the parent directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute (e.g. "C:\Users\ursul\Desktop") or relatative to the current working directory (e.g. "Documents\folder"). The default is the parent directory of the file containing the code (so if you don't pass this argument, then again, make sure the transcript and the code are in the same folder).
 - `-readname file_name` tells the program the name of the transcript file to read. The default is "transcript".
-- `-writename file_name` tells the program what to name the output file. The default is "wiki".
+- `-writename file_name` tells the program what to name the output file. The default is "wikicode".
 
-There are two versions of the code. The one with the label "base" at the end does not have the following features, but the main code does. They are activated by passing the following arguments:
-- `-ui` opens up a window with a graphical user interface. If you do this, you don't need to pass any of the arguments below or any of those in the list above. This requires the PyQt5 package.
+The following optional arguments access additional features:
 - `-expand` wraps the wiki-code inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
 - `-abbrev` turns on recognition of abbreviations for character names when indicating a speaker. This mode applies universally, i.e. don't write a transcript with a mix of abbreviated and non-abbreviated names (or at least make the abbreviation to be just the original name). The abbreviations are hard-coded in.
+- `-gui` opens up a window with a graphical user interface. If you do this, you don't need to pass any of the 5 arguments above because they will be handled by the GUI. This requires the PyQt5 package.
+
+There is a version of the code with a label "\_base" at the end of its name. It holds the core functionality of the code, without any of the 5 features listed above.
 
 ### Writing a transcript file
-Transcript files are `.txt` files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners or a change of speaker.
+Transcript files are text files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners or a change of speaker.
 - **Locations:** start a new line, and write the location name followed immediately by a slash (`/`). 
 - **New speaker:** start a new line, and write either a single or double slash (`/` or `//`) followed by the speaker's name.
   - Single slash is for the main characters (those of the 25 bands and Marina). It doesn't matter if the name is capitalized or not. It can also be an abbrevation. See below for the list of abbreviations. You can change them to your own if you want. They're just hard-coded in.
