@@ -7,8 +7,8 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
 parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
-parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wiki')
-parser.add_argument('-ui', action='store_true')
+parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wikicode')
+parser.add_argument('-gui', action='store_true')
 parser.add_argument('-abbrev', action='store_true')
 parser.add_argument('-expand', action='store_true')
 
@@ -50,7 +50,7 @@ def main(f1, f2, abb, expand):
 
 			except Slash:
 				print('\nDetected possible slash "/" in dialog or loc text.')
-				print('LINE: ' + line.strip())
+				print('LINE: ' + l)
 				cont = input('Select: (0) neither, (1) loc, (2) dialog\n--> ')
 				if cont == '0':
 					f2.write(skip[0])
@@ -58,7 +58,7 @@ def main(f1, f2, abb, expand):
 				elif cont == '1':
 					f2.write('{{loc|' + line.strip()[:len(line)-1] + '}}\n')
 				elif cont == '2':
-					f2.write( writeNew.replace('[line]', line.strip().replace('[you]', '{{USERNAME}}-san')) )
+					f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
 				else:
 					print('INVALID INPUT.')
 					f2.write(skip[0])
@@ -66,7 +66,7 @@ def main(f1, f2, abb, expand):
 				continue
 		else:
 			try:
-				f2.write( writeNew.replace('[line]', line.strip().replace('[you]', '{{USERNAME}}-san')) )
+				f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
 			except UnicodeError:
 				print('Possible special character. Check transcript file.')
 				f2.write(skip[0])
@@ -91,7 +91,7 @@ if args.ui:
 			self.title = 'Bandori Wiki Story Writer'
 			self.left = 10
 			self.top = 10
-			self.width = 500
+			self.width = 600
 			self.height = 200
 			self.initUI()
 
@@ -99,13 +99,20 @@ if args.ui:
 			font=QtGui.QFont()
 			font.setPixelSize(25)
 
-			self.readFileNameLabel = QLabel('Path of file to read')
-			self.fileLoadEdit = QLineEdit(self)
-			self.loadButton = QPushButton('Select', self)
+			self.readFileLabel = QLabel('Transcript File')
+			self.readFileLoadEdit = QLineEdit(self)
+			self.readFileLoadEdit.setPlaceholderText('File path')
+			self.loadButton = QPushButton('Load file', self)
 			self.loadButton.clicked.connect(self.openFile)
 
-			self.writeFileNameLabel = QLabel('Name of file to write')
+			self.writeFileLabel = QLabel('Output File')
 			self.writeFileNameEdit = QLineEdit(self)
+			self.writeFileNameEdit.setPlaceholderText('File name')
+			self.folderLabel = QLabel('Folder to save file in')
+			self.folderNameEdit = QLineEdit(self)
+			self.folderNameEdit.setPlaceholderText('Folder path')
+			self.selectFolderButton = QPushButton('Select Folder', self)
+			self.selectFolderButton.clicked.connect(self.openFolder)
 
 			self.abbreviation = QCheckBox('Use abbreviations')
 			self.expand = QCheckBox('Include expand wrapper')
@@ -118,13 +125,18 @@ if args.ui:
 			mainhbox = QHBoxLayout(self)
 
 			fileloadbox = QHBoxLayout(self)
-			fileloadbox.addWidget(self.fileLoadEdit)
+			fileloadbox.addWidget(self.readFileLoadEdit)
 			fileloadbox.addWidget(self.loadButton)
 
+			folderloadbox = QHBoxLayout(self)
+			folderloadbox.addWidget(self.folderNameEdit)
+			folderloadbox.addWidget(self.selectFolderButton)
+
 			vbox = QVBoxLayout(self)
-			vbox.addWidget(self.readFileNameLabel)
+			vbox.addWidget(self.readFileLabel)
 			vbox.addLayout(fileloadbox)
-			vbox.addWidget(self.writeFileNameLabel)
+			vbox.addWidget(self.writeFileLabel)
+			vbox.addLayout(folderloadbox)
 			vbox.addWidget(self.writeFileNameEdit)
 			vbox.addWidget(self.abbreviation)
 			vbox.addWidget(self.expand)
@@ -147,26 +159,36 @@ if args.ui:
 
 		def openFile(self):
 			filename = QFileDialog.getOpenFileName(self, 'Select File')
-			self.fileLoadEdit.setText(filename[0])
+			self.readFileLoadEdit.setText(filename[0])
+
+		def openFolder(self):
+			dlg = QFileDialog(self, 'Select folder')
+			dlg.setFileMode(QFileDialog.Directory)
+			if dlg.exec_():
+				filenames = dlg.selectedFiles()
+				self.folderNameEdit.setText(filenames[0])
 
 		def stop(self):
 			self.close()
 
 		def start(self):
-			readfile = self.fileLoadEdit.text()
-			p = str(Path(readfile).parent) + '\\'
+			readfile = self.readFileLoadEdit.text()
+			writefile = ''
+
+			if self.folderNameEdit.text() == '':
+				writefile = str(Path(readfile).parent) + '\\'
+			else:
+				writefile = self.folderNameEdit.text() + '/'
 
 			if self.writeFileNameEdit.text() == '':
-				writefile = p + 'wiki.txt'
+				writefile = writefile + 'wikicode.txt'
 			else:
-				writefile = p + self.writeFileNameEdit.text() + '.txt'
+				writefile = writefile + self.writeFileNameEdit.text() + '.txt'
 
-			f1 = open(readfile, 'r')
-			f2 = open(writefile, 'w')
-			main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
-			f1.close()
-			f2.close()
-			print('Read: ' + readfile.replace('/','\\') + '\nWrite: ' + writefile)
+			with open(readfile, 'r') as f1, open(writefile, 'w') as f2:
+				main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
+
+			print('Read: ' + readfile + '\nWrite: ' + writefile)
 
 
 	if __name__ == '__main__':
@@ -175,8 +197,5 @@ if args.ui:
 		sys.exit(app.exec_())
 
 else:
-	f1 = open(args.path + '\\' + args.readname + '.txt', 'r', encoding='utf-8')
-	f2 = open(args.path + '\\' + args.writename + '.txt', 'w', encoding='utf-8')
-	main(f1, f2, args.abbrev, args.expand)
-	f1.close()
-	f2.close()
+	with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
+		main(f1, f2, args.abbrev, args.expand)
