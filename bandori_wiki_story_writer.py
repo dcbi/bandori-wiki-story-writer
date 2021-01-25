@@ -77,7 +77,7 @@ def main(f1, f2, abb, expand):
 
 	if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
 
-if args.ui:
+if args.gui:
 	import sys
 	from PyQt5 import QtGui, QtCore
 	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QFileDialog, QCheckBox)
