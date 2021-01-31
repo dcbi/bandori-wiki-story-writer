@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
 parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
-parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wikicode')
+parser.add_argument('-writename', help='name of file to write to, default=wikicode', default='wikicode')
 parser.add_argument('-gui', action='store_true')
 parser.add_argument('-abbrev', action='store_true')
 parser.add_argument('-expand', action='store_true')
