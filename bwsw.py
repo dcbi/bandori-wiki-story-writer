@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
 parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
-parser.add_argument('-writename', help='name of file to write to, default=wikicode', default='wikicode')
+parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wikicode')
 parser.add_argument('-gui', action='store_true')
 parser.add_argument('-abbrev', action='store_true')
 parser.add_argument('-expand', action='store_true')
@@ -17,7 +17,11 @@ args = parser.parse_args()
 short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
 
 def process(name, abb):
-	if abb: return short[name]
+	lower_case = name.lower()
+	if abb:
+		if lower_case in list(short.keys()): return short[lower_case]
+		else: return name
+	elif lower_case in list(short.values()): return lower_case
 	else: return name
 
 class Slash(Exception): pass
@@ -32,17 +36,14 @@ def main(f1, f2, abb, expand):
 	for line in f1:
 		l = line.strip()
 		if l == '':
-			f2.write('<br />\n')
+			f2.write('<br />'*2 + '\n')
 			continue
 
 		elif '/' in l:
 			try:
 				tag = l.split('/')
 				if tag[0] == '':
-					if tag[1] == '':
-						writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
-					else:
-						writeNew = '{{dialog|' + process(tag[1].lower(), abb) + '|[line]}}\n'
+					writeNew = '{{dialog|' + process(tag[1], abb) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
@@ -73,7 +74,7 @@ def main(f1, f2, abb, expand):
 				skip[1] += 1
 				continue
 
-	if expand: f2.write('</div>')
+	if expand: f2.write('</div><br />')
 
 	if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
 
@@ -89,8 +90,8 @@ if args.gui:
 			super().__init__()
 
 			self.title = 'Bandori Wiki Story Writer'
-			self.left = 10
-			self.top = 10
+			self.left = 100
+			self.top = 100
 			self.width = 600
 			self.height = 200
 			self.initUI()
@@ -188,7 +189,7 @@ if args.gui:
 			with open(readfile, 'r') as f1, open(writefile, 'w') as f2:
 				main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
 
-			print('Read: ' + readfile + '\nWrite: ' + writefile)
+			print('Read: ' + readfile.replace('/','\\') + '\nWrite: ' + writefile)
 
 
 	if __name__ == '__main__':
