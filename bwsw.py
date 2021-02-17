@@ -26,8 +26,8 @@ def process(name, abb):
 
 class Slash(Exception): pass
 
-def main(f1, f2, abb, expand):
-	if expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
+with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
+	if args.expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
 	skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
 
@@ -36,14 +36,15 @@ def main(f1, f2, abb, expand):
 	for line in f1:
 		l = line.strip()
 		if l == '':
-			f2.write('<br />'*2 + '\n')
+			f2.write('<br />' + '\n')
 			continue
 
 		elif '/' in l:
 			try:
 				tag = l.split('/')
 				if tag[0] == '':
-					writeNew = '{{dialog|' + process(tag[1], abb) + '|[line]}}\n'
+					if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
+					else: writeNew = '{{dialog|' + process(tag[1], args.abbrev) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
@@ -57,7 +58,7 @@ def main(f1, f2, abb, expand):
 					f2.write(skip[0])
 					skip[1] += 1
 				elif cont == '1':
-					f2.write('{{loc|' + line.strip()[:len(line)-1] + '}}\n')
+					f2.write('{{loc|' + l[:len(line)-1] + '}}\n')
 				elif cont == '2':
 					f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
 				else:
@@ -67,136 +68,13 @@ def main(f1, f2, abb, expand):
 				continue
 		else:
 			try:
-				f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
+				f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san') ) )
 			except UnicodeError:
 				print('Possible special character. Check transcript file.')
 				f2.write(skip[0])
 				skip[1] += 1
 				continue
 
-	if expand: f2.write('</div><br />')
+	if args.expand: f2.write('</div><br />')
 
 	if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
-
-if args.gui:
-	import sys
-	from PyQt5 import QtGui, QtCore
-	from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QFileDialog, QCheckBox)
-
-	writeFileName = None
-
-	class MyApp(QWidget):
-		def __init__(self):
-			super().__init__()
-
-			self.title = 'Bandori Wiki Story Writer'
-			self.left = 100
-			self.top = 100
-			self.width = 600
-			self.height = 200
-			self.initUI()
-
-		def initUI(self):
-			font=QtGui.QFont()
-			font.setPixelSize(25)
-
-			self.readFileLabel = QLabel('Transcript File')
-			self.readFileLoadEdit = QLineEdit(self)
-			self.readFileLoadEdit.setPlaceholderText('File path')
-			self.loadButton = QPushButton('Load file', self)
-			self.loadButton.clicked.connect(self.openFile)
-
-			self.writeFileLabel = QLabel('Output File')
-			self.writeFileNameEdit = QLineEdit(self)
-			self.writeFileNameEdit.setPlaceholderText('File name')
-			self.folderLabel = QLabel('Folder to save file in')
-			self.folderNameEdit = QLineEdit(self)
-			self.folderNameEdit.setPlaceholderText('Folder path')
-			self.selectFolderButton = QPushButton('Select Folder', self)
-			self.selectFolderButton.clicked.connect(self.openFolder)
-
-			self.abbreviation = QCheckBox('Use abbreviations')
-			self.expand = QCheckBox('Include expand wrapper')
-
-			self.startButton = QPushButton('Run', self)
-			self.startButton.clicked.connect(self.start)
-			self.stopButton = QPushButton('Exit', self)
-			self.stopButton.clicked.connect(self.stop)
-
-			mainhbox = QHBoxLayout(self)
-
-			fileloadbox = QHBoxLayout(self)
-			fileloadbox.addWidget(self.readFileLoadEdit)
-			fileloadbox.addWidget(self.loadButton)
-
-			folderloadbox = QHBoxLayout(self)
-			folderloadbox.addWidget(self.folderNameEdit)
-			folderloadbox.addWidget(self.selectFolderButton)
-
-			vbox = QVBoxLayout(self)
-			vbox.addWidget(self.readFileLabel)
-			vbox.addLayout(fileloadbox)
-			vbox.addWidget(self.writeFileLabel)
-			vbox.addLayout(folderloadbox)
-			vbox.addWidget(self.writeFileNameEdit)
-			vbox.addWidget(self.abbreviation)
-			vbox.addWidget(self.expand)
-
-			buttonsbox = QHBoxLayout(self)
-			buttonsbox.addStretch(1)
-			buttonsbox.addWidget(self.stopButton)
-			buttonsbox.addWidget(self.startButton)
-			buttonsbox.addStretch()
-
-			vbox.addLayout(buttonsbox)
-			vbox.addStretch()
-
-			mainhbox.addLayout(vbox)
-
-			self.setLayout(mainhbox)
-			self.setWindowTitle(self.title)
-			self.setGeometry(self.left, self.top, self.width, self.height)
-			self.show()
-
-		def openFile(self):
-			filename = QFileDialog.getOpenFileName(self, 'Select File')
-			self.readFileLoadEdit.setText(filename[0])
-
-		def openFolder(self):
-			dlg = QFileDialog(self, 'Select folder')
-			dlg.setFileMode(QFileDialog.Directory)
-			if dlg.exec_():
-				filenames = dlg.selectedFiles()
-				self.folderNameEdit.setText(filenames[0])
-
-		def stop(self):
-			self.close()
-
-		def start(self):
-			readfile = self.readFileLoadEdit.text()
-			writefile = ''
-
-			if self.folderNameEdit.text() == '':
-				writefile = str(Path(readfile).parent) + '\\'
-			else:
-				writefile = self.folderNameEdit.text() + '/'
-
-			if self.writeFileNameEdit.text() == '':
-				writefile = writefile + 'wikicode.txt'
-			else:
-				writefile = writefile + self.writeFileNameEdit.text() + '.txt'
-
-			with open(readfile, 'r') as f1, open(writefile, 'w') as f2:
-				main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
-
-			print('Read: ' + readfile.replace('/','\\') + '\nWrite: ' + writefile)
-
-
-	if __name__ == '__main__':
-		app = QApplication(sys.argv)
-		ex = MyApp()
-		sys.exit(app.exec_())
-
-else:
-	with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
-		main(f1, f2, args.abbrev, args.expand)
