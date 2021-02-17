@@ -28,4 +28,4 @@ with open(dir + '\\transcript.txt', 'r') as f1, open(dir + '\\wikicode.txt', 'w'
 			continue
 
 		else:
-			f2.write( writeNew + line.strip().replace('[you]', '{{USERNAME}}-san') + '}}\n' )
+			f2.write( writeNew + l.replace('[you]', '{{USERNAME}}-san') + '}}\n' )
