@@ -1,18 +1,23 @@
 import argparse
 from pathlib import Path
 
-parent_dir = str(Path(__file__).parent.absolute())
+dir = str(Path(__file__).parent.absolute())
 
-parser = argparse.ArgumentParser()
+long = {'kasumi': 'kas', 'tae': 'tae', 'rimi': 'rim', 'saaya': 'say', 'arisa': 'ari', 'yukina': 'y', 'sayo': 's', 'lisa': 'l', 'ako': 'a', 'rinko': 'r', 'aya': 'aya', 'hina': 'hin', 'chisato': 'chi', 'maya': 'may', 'eve': 'eve', 'ran': 'ran', 'moca': 'moc', 'himari': 'him', 'tomoe': 'tom', 'tsugumi': 'tsu', 'kokoro': 'kok', 'kaoru': 'kao', 'hagumi': 'hag', 'kanon': 'kan', 'misaki': 'mis', 'marina': 'mar'}
 
-parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
+parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(long))
+
+parser.add_argument('-path', help="parent directory of files to read and write, default="+dir, default=dir)
 parser.add_argument('-writename', help='name of file to write to, default=transcript', default='transcript')
 parser.add_argument('-readname', help='name of file to read from, default=wikicode', default='wikicode')
-parser.add_argument('-abbrev', help='turn on using abbreviations of character names', action=store_true)
+parser.add_argument('-abbrev', help='turn on using abbreviations of character names', action='store_true')
+parser.add_argument('-new', action='append', nargs=2, metavar=('CHARACTER', 'ABBREVIATION'), help='set a custom abbreviation for a name', default=list() )
 
 args = parser.parse_args()
 
-long = {'kasumi': 'kas', 'tae': 'tae', 'rimi': 'rim', 'saaya': 'say', 'arisa': 'ari', 'yukina': 'y', 'sayo': 's', 'lisa': 'l', 'ako': 'a', 'rinko': 'r', 'aya': 'aya', 'hina': 'hin', 'chisato': 'chi', 'maya': 'may', 'eve': 'eve', 'ran': 'ran', 'moca': 'moc', 'himari': 'him', 'tomoe': 'tom', 'tsugumi': 'tsu', 'kokoro': 'kok', 'kaoru': 'kao', 'hagumi': 'hag', 'kanon': 'kan', 'misaki': 'mis', 'marina': 'mar'}
+if any(args.new):
+	for x in args.new:
+		long[x[0]] = x[1]
 
 def mystrip(line):
 	return line.strip().strip('{').strip('}')
