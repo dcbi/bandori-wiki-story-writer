@@ -39,6 +39,8 @@ You can pass the following optional arguments to access additional features:
 
 There is a version of the code with a label "\_gui" at the end of its name. It opens a window with a graphical user interface. If you do this, you don't need to pass any of the 5 arguments above because they will be handled by the GUI. The GUI requires the PyQt5 package. The GUI does not support custom abbreviations.
 
+There is another code that with a label "\_reverse" at the end of its name. This will do the opposite of this program - turn a text file with wikicode of a story into a transcript file. It accepts the option `-short` to turn character names into abbreviated names. It also accepts the same option `-abbrev` to set custom abbreviations, but the order of the two arguments after it must be switched: `CHARACTER ABBREVIATION`.
+
 ### Writing a transcript file
 Transcript files are text files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners, a change of speaker, or blank space.
 - **Blank space:** to insert `<br />`, simply write an empty line (it may also contain spaces). For example, this can represent when the story skips a brief moment of time.
