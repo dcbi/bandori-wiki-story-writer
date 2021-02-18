@@ -10,13 +10,13 @@ parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(long))
 parser.add_argument('-path', help="parent directory of files to read and write, default="+dir, default=dir)
 parser.add_argument('-writename', help='name of file to write to, default=transcript', default='transcript')
 parser.add_argument('-readname', help='name of file to read from, default=wikicode', default='wikicode')
-parser.add_argument('-abbrev', help='turn on using abbreviations of character names', action='store_true')
-parser.add_argument('-new', action='append', nargs=2, metavar=('CHARACTER', 'ABBREVIATION'), help='set a custom abbreviation for a name', default=list() )
+parser.add_argument('-short', help='turn on using abbreviations of character names', action='store_true')
+parser.add_argument('-abbrev', action='append', nargs=2, metavar=('CHARACTER', 'ABBREVIATION'), help='set a custom abbreviation for a name', default=list() )
 
 args = parser.parse_args()
 
-if any(args.new):
-	for x in args.new:
+if any(args.abbrev):
+	for x in args.abbrev:
 		long[x[0]] = x[1]
 
 def mystrip(line):
@@ -41,4 +41,4 @@ def main(line, abb):
 		return line + '\n'
 
 with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
-	for line in f1: f2.write(  main( mystrip(line), args.abbrev )  )
+	for line in f1: f2.write(  main( mystrip(line), args.short )  )
