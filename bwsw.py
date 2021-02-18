@@ -1,28 +1,32 @@
 import argparse
 from pathlib import Path
 
-parent_dir = str(Path(__file__).parent.absolute())
-
-parser = argparse.ArgumentParser()
-
-parser.add_argument('-path', help="parent directory of files to read and write, default="+parent_dir, default=parent_dir)
-parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
-parser.add_argument('-writename', help='name of file to write to, default=wiki', default='wikicode')
-parser.add_argument('-gui', action='store_true')
-parser.add_argument('-abbrev', action='store_true')
-parser.add_argument('-expand', action='store_true')
-
-args = parser.parse_args()
+dir = str(Path(__file__).parent.absolute())
 
 short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
 
-def process(name, abb):
-	lower_case = name.lower()
-	if abb:
-		if lower_case in list(short.keys()): return short[lower_case]
-		else: return name
-	elif lower_case in list(short.values()): return lower_case
-	else: return name
+parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(short))
+
+parser.add_argument('-path', help="parent directory of files to read and write, default="+dir, default=dir)
+parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
+parser.add_argument('-writename', help='name of file to write to, default=wikicode', default='wikicode')
+parser.add_argument('-abbrev', action='append', nargs=2, metavar=('ABBREVIATION','CHARACTER'), help='set a custom abbreviation for a name', default=list() )
+parser.add_argument('-expand', action='store_true', help='inserts wikicode to put story inside collapsible frame')
+
+args = parser.parse_args()
+
+if any(args.abbrev):
+	for x in args.abbrev:
+		short[x[0]] = x[1]
+
+def process(NAME, abb):
+	name = NAME.lower()
+	if name in list(short.keys()):
+		return short[name]
+	elif name in list(short.values()):
+		return name
+	else:
+		return NAME
 
 class Slash(Exception): pass
 
