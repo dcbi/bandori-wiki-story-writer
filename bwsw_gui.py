@@ -6,19 +6,20 @@ from traceback import print_exc
 
 short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
 
-def process(name, abb):
-	lower_case = name.lower()
-	if abb:
-		if lower_case in list(short.keys()): return short[lower_case]
-		else: return name
-	elif lower_case in list(short.values()): return lower_case
-	else: return name
+def process(NAME):
+	name = NAME.lower()
+	if name in list(short.keys()):
+		return short[name]
+	elif name in list(short.values()):
+		return name
+	else:
+		return NAME
 
 class Slash(Exception): pass
 
 skip = ['-'*10 + 'SKIPPED LINE' + '-'*10]
 
-def main(f1, f2, abb, expand):
+def main(f1, f2, expand):
 	if expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
 	writeNew = ''
@@ -36,7 +37,7 @@ def main(f1, f2, abb, expand):
 					if tag[1] == '':
 						writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
 					else:
-						writeNew = '{{dialog|' + process(tag[1], abb) + '|[line]}}\n'
+						writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
@@ -109,7 +110,6 @@ class App(QWidget):
 		self.selectFolderButton = QPushButton('Select Folder', self)
 		self.selectFolderButton.clicked.connect(self.openFolder)
 
-		self.abbreviation = QCheckBox('Use abbreviations')
 		self.expand = QCheckBox('Include expand wrapper')
 
 		self.startButton = QPushButton('Run', self)
@@ -133,7 +133,6 @@ class App(QWidget):
 		vbox.addWidget(self.writeFileLabel)
 		vbox.addLayout(folderloadbox)
 		vbox.addWidget(self.writeFileNameEdit)
-		vbox.addWidget(self.abbreviation)
 		vbox.addWidget(self.expand)
 
 		hbox = QHBoxLayout(self)
@@ -178,7 +177,7 @@ class App(QWidget):
 			writefile = writefile + self.writeFileNameEdit.text() + '.txt'
 
 		with open(readfile, 'r') as f1, open(writefile, 'w') as f2:
-			try: main(f1, f2, self.abbreviation.isChecked(), self.expand.isChecked())
+			try: main(f1, f2, self.expand.isChecked())
 			except:
 				print_exc()
 				msg = QMessageBox()
