@@ -19,7 +19,7 @@ if any(args.abbrev):
 	for x in args.abbrev:
 		short[x[0]] = x[1]
 
-def process(NAME, abb):
+def process(NAME):
 	name = NAME.lower()
 	if name in list(short.keys()):
 		return short[name]
@@ -48,7 +48,7 @@ with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path 
 				tag = l.split('/')
 				if tag[0] == '':
 					if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
-					else: writeNew = '{{dialog|' + process(tag[1], args.abbrev) + '|[line]}}\n'
+					else: writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
 				else:
 					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
 					else: raise Slash
