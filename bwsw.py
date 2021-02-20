@@ -16,69 +16,69 @@ parser.add_argument('-expand', action='store_true', help='inserts wikicode to pu
 args = parser.parse_args()
 
 if any(args.abbrev):
-	for x in args.abbrev:
-		short[x[0]] = x[1]
+    for x in args.abbrev:
+        short[x[0]] = x[1]
 
 def process(NAME):
-	name = NAME.lower()
-	if name in list(short.keys()):
-		return short[name]
-	elif name in list(short.values()):
-		return name
-	else:
-		return NAME
+    name = NAME.lower()
+    if name in list(short.keys()):
+        return short[name]
+    elif name in list(short.values()):
+        return name
+    else:
+        return NAME
 
 class Slash(Exception): pass
 
 with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
-	if args.expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
+    if args.expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
-	skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
+    skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
 
-	writeNew = ''
+    writeNew = ''
 
-	for line in f1:
-		l = line.strip()
-		if l == '':
-			f2.write('<br />' + '\n')
-			continue
+    for line in f1:
+        l = line.strip()
+        if l == '':
+            f2.write('<br />' + '\n')
+            continue
 
-		elif '/' in l:
-			try:
-				tag = l.split('/')
-				if tag[0] == '':
-					if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
-					else: writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
-				else:
-					if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
-					else: raise Slash
-				continue
+        elif '/' in l:
+            try:
+                tag = l.split('/')
+                if tag[0] == '':
+                    if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
+                    else: writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
+                else:
+                    if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
+                    else: raise Slash
+                continue
 
-			except Slash:
-				print('\nDetected possible slash "/" in dialog or loc text.')
-				print('LINE: ' + l)
-				cont = input('Select: (0) neither, (1) loc, (2) dialog\n--> ')
-				if cont == '0':
-					f2.write(skip[0])
-					skip[1] += 1
-				elif cont == '1':
-					f2.write('{{loc|' + l[:len(line)-1] + '}}\n')
-				elif cont == '2':
-					f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
-				else:
-					print('INVALID INPUT.')
-					f2.write(skip[0])
-					skip[1] += 1
-				continue
-		else:
-			try:
-				f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san') ) )
-			except UnicodeError:
-				print('Possible special character. Check transcript file.')
-				f2.write(skip[0])
-				skip[1] += 1
-				continue
+            except Slash:
+                print('\nDetected possible slash "/" in dialog or loc text.')
+                print('LINE: ' + l)
+                cont = input('Select: (0) neither, (1) loc, (2) dialog\n--> ')
+                if cont == '0':
+                    f2.write(skip[0])
+                    skip[1] += 1
+                elif cont == '1':
+                    f2.write('{{loc|' + l[:len(line)-1] + '}}\n')
+                elif cont == '2':
+                    f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
+                else:
+                    print('INVALID INPUT.')
+                    f2.write(skip[0])
+                    skip[1] += 1
+                continue
+        else:
+            try:
+                f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san') ) )
+            except UnicodeError:
+                print('Possible special character. Check transcript file.')
+                f2.write(skip[0])
+                skip[1] += 1
+                continue
 
-	if args.expand: f2.write('</div><br />')
+    if args.expand: f2.write('</div><br />')
 
-	if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
+    if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
