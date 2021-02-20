@@ -7,11 +7,11 @@ short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa'
 
 parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(short))
 
-parser.add_argument('-path', help="parent directory of files to read and write, default="+dir, default=dir)
-parser.add_argument('-readname', help='name of file to read from, default=transcript', default='transcript')
-parser.add_argument('-writename', help='name of file to write to, default=wikicode', default='wikicode')
-parser.add_argument('-abbrev', action='append', nargs=2, metavar=('ABBREVIATION','CHARACTER'), help='set a custom abbreviation for a name', default=list() )
-parser.add_argument('-expand', action='store_true', help='inserts wikicode to put story inside collapsible frame')
+parser.add_argument('-p', '--path', help="parent directory of files to read and write, default="+dir, default=dir)
+parser.add_argument('-r', '--readname', help='name of file to read from, default=transcript', default='transcript')
+parser.add_argument('-w', '--writename', help='name of file to write to, default=wikicode', default='wikicode')
+parser.add_argument('-a', '--abbrev', action='append', nargs=2, metavar=('ABBREVIATION','CHARACTER'), help='set a custom abbreviation for a name', default=list() )
+parser.add_argument('-e', '--expand', action='store_true', help='inserts wikicode to put story inside collapsible frame')
 
 args = parser.parse_args()
 
