@@ -12,10 +12,7 @@ parser.add_argument('-e', '--expand', action='store_true', help='inserts wikicod
 
 args = parser.parse_args()
 
-class Slash(Exception): pass
-
-writeNew = ''
-skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
+skip = ['-'*10 + 'SKIPPED LINE' + '-'*10 + '}}\n', 0]
 names = ('kasumi', 'tae', 'rimi', 'saaya', 'arisa', 'yukina', 'sayo', 'lisa', 'ako', 'rinko', 'aya', 'hina', 'chisato', 'maya', 'eve', 'ran', 'moca', 'himari', 'tomoe', 'tsugumi', 'kokoro', 'kaoru', 'hagumi', 'kanon', 'misaki', 'marina')
 
 def check_name(NAME):
@@ -26,41 +23,18 @@ def check_name(NAME):
         return NAME
 
 def process(line,f1,f2):
-    global writeNew
     global skip
 
-    l = line.strip()
+    tag = line[0]
+    l = line[1]
 
-    if '/' in l:
+    if tag == 0:
+        f2.write( '{{loc|' + l + '}}\n' )
+    elif tag == 1:
+        f2.write( '{{dialog|' + check_name(l) + '|' )
+    elif tag == 2:
         try:
-            tag = l.split('/')
-            if tag[0] == '':
-                if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
-                else: writeNew = '{{dialog|' + check_name(tag[1]) + '|[line]}}\n'
-            else:
-                if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
-                else: raise Slash
-            return
-
-        except Slash:
-            print('\nDetected possible slash "/" in dialog or loc text.')
-            print('LINE: ' + l)
-            cont = input('Select: (0) neither, (1) loc, (2) dialog\n--> ')
-            if cont == '0':
-                f2.write(skip[0])
-                skip[1] += 1
-            elif cont == '1':
-                f2.write('{{loc|' + l[:len(line)-1] + '}}\n')
-            elif cont == '2':
-                f2.write( writeNew.replace('[line]', l.replace('@chariot', '{{USERNAME}}') ) )
-            else:
-                print('INVALID INPUT.')
-                f2.write(skip[0])
-                skip[1] += 1
-            return
-    else:
-        try:
-            f2.write( writeNew.replace('[line]', l.replace('@chariot', '{{USERNAME}}') ) )
+            f2.write( l.replace('@chariot', '{{USERNAME}}') + '}}\n')
         except UnicodeError:
             print('Possible special character. Check transcript file.')
             f2.write(skip[0])
@@ -105,14 +79,14 @@ class Bestdori_Parser(HTMLParser):
 
     def handle_data(self, data):
         if self.loc:
-            self.transcript.append(data.strip() + '/\n')
+            self.transcript.append( (0, data.strip()) )
             self.loc = False
         elif self.name_div and self.name_span:
-            self.transcript.append('/' + data.strip() + '\n')
+            self.transcript.append( (1, data.strip()) )
             self.name_div = False
             self.name_span = False
         elif self.dialog1 and self.dialog2:
-            self.transcript.append(data.strip().replace('\n','') + '\n')
+            self.transcript.append( (2, data.strip().replace('\n','') ) )
             self.dialog1 = False
             self.dialog2 = False
 
