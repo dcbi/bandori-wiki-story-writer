@@ -29,17 +29,19 @@ The following is the wiki-code that the above transcript is converted into:
 
 ### Example Usage
 Suppose you have a transcript already written. As long as it is in the same location as the file containing the code and it is titled "transcript", simply run `python bwsw.py`. To loosen these restrictions, pass any of the following optional arguments: 
-- `-path myfolder` sets the directory represented by `myfolder` as the directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute (e.g. `C:\Users\ursul\Desktop`) or relatative to the current working directory (e.g. `Documents\myfolder`). The default is the parent directory of the file containing the code (so if you don't pass this argument, then again, make sure the transcript and the code are in the same folder).
-- `-readname file_name` tells the program the name of the transcript file to read. The default is "transcript".
-- `-writename file_name` tells the program what to name the output file. The default is "wikicode".
+- `--path myfolder` sets the directory represented by `myfolder` as the directory where the transcript file is to be read from and where the output file is to be saved. The path can be either absolute (e.g. `C:\Users\ursul\Desktop`) or relatative to the current working directory (e.g. `Documents\myfolder`). The default is the parent directory of the file containing the code (so if you don't pass this argument, then again, make sure the transcript and the code are in the same folder).
+- `--readname file_name` tells the program the name of the transcript file to read. The default is "transcript".
+- `--writename file_name` tells the program what to name the output file. The default is "wikicode".
 
 You can pass the following optional arguments to access additional features:
-- `-expand` includes wiki-code that will put the story inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
-- `-abbrev ABBREVIATION NAME` updates the default dictionary of character name abbreviations with a new key-value pair given by `{ABBREVIATION:CHARACTER}`. See below for the default abbreviations.
+- `--expand` includes wiki-code that will put the story inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
+- `--abbrev ABBREVIATION NAME` updates the default dictionary of character name abbreviations with a new key-value pair given by `{ABBREVIATION:CHARACTER}`. See below for the default abbreviations.
 
 There is a version of the code with a label "\_gui" at the end of its name. It opens a window with a graphical user interface. If you do this, you don't need to pass any of the 5 arguments above because they will be handled by the GUI. The GUI requires the PyQt5 package. The GUI does not support custom abbreviations.
 
-There is another code that with a label "\_reverse" at the end of its name. This will do the opposite of this program - turn a text file with wikicode of a story into a transcript file. It accepts the option `-short` to turn character names into abbreviated names. It also accepts the same option `-abbrev` to set custom abbreviations, but the order of the two arguments after it must be switched: `CHARACTER ABBREVIATION`.
+There is another code that with a label "\_reverse" at the end of its name. This will do the opposite of this program - turn a text file with wikicode of a story into a transcript file. It accepts the option `--short` to turn character names into abbreviated names. It also accepts the same option `--abbrev` to set custom abbreviations, but the order of the two arguments after it must be switched: `CHARACTER ABBREVIATION`.
+
+There is a version of the code with the label "\_bestdori" at the end of its name. This script assumes that the contents of the transcript file is actually the HTML source code a page on [Bestdori Story Viewer](https://bestdori.com/tool/storyviewer). This script also accepts the options listed above, except for `--abbrev`, and with the default of `--readname` now set to "source". Because the Bestdori website loads a lot of its content with JavaScript, care should be taken when accessing the HTML to ensure that it indeed contains the story. For example, right-clicking a page in a browser and selecting "View page source" may only show an empty `<body>` save for a message that reads, "We're sorry but Bestdori! doesn't work properly without JavaScript enabled. Please enable it to continue." A way that works is to right-click on the page in a browser and selecting "Inspect element". The story content usually begins at a tag `<div data-v-4e5055e5>`.
 
 ### Writing a transcript file
 Transcript files are text files. They hold all the dialogue of an event/card story and use minimal syntax to indicate location banners, a change of speaker, or blank space.
