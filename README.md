@@ -70,6 +70,7 @@ The default abbreviations are implemented by the dictionary below. You can chang
 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve',
 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi',
 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki',
-'mar':'marina'}
+'mar':'marina',
+'mash': 'mashiro', 'tok': 'touko', 'nan': 'nanami', 'tsuk': 'tsukushi', 'rui': 'rui'}
 ```
 You can probably tell which band is my favorite.
