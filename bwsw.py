@@ -3,7 +3,12 @@ from pathlib import Path
 
 dir = str(Path(__file__).parent.absolute())
 
-short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
+short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa',
+'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko',
+'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve',
+'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi',
+'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina',
+'mash': 'mashiro', 'tok': 'touko', 'nan': 'nanami', 'tsuk': 'tsukushi', 'rui': 'rui'}
 
 parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(short))
 
@@ -19,8 +24,7 @@ if any(args.abbrev):
     for x in args.abbrev:
         short[x[0]] = x[1]
 
-def process(NAME):
-    name = NAME.lower()
+def checkName(name):
     if name in list(short.keys()):
         return short[name]
     elif name in list(short.values()):
@@ -30,8 +34,8 @@ def process(NAME):
 
 class Slash(Exception): pass
 
-with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
-    if args.expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
+def main(f1,f2,expand):
+    if expand: f2.write('<div class="mw-collapsible mw-collapsed">\n')
 
     skip = ['-'*10 + 'SKIPPED LINE' + '-'*10, 0]
 
@@ -48,7 +52,7 @@ with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path 
                 tag = l.split('/')
                 if tag[0] == '':
                     if tag[1] == '': writeNew = '{{dialog|other||[line]|' + tag[2] + '}}\n'
-                    else: writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
+                    else: writeNew = '{{dialog|' + checkName(tag[1]) + '|[line]}}\n'
                 else:
                     if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
                     else: raise Slash
@@ -79,6 +83,10 @@ with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path 
                 skip[1] += 1
                 continue
 
-    if args.expand: f2.write('</div><br />')
+    if expand: f2.write('</div><br />')
 
     if not skip[1] == 0: print(str(skip[1]) + ' line(s) skipped. Fix output file manually.')
+
+with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
+    main(f1,f2,args.expand)
+    
