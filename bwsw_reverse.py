@@ -3,7 +3,12 @@ from pathlib import Path
 
 dir = str(Path(__file__).parent.absolute())
 
-long = {'kasumi': 'kas', 'tae': 'tae', 'rimi': 'rim', 'saaya': 'say', 'arisa': 'ari', 'yukina': 'y', 'sayo': 's', 'lisa': 'l', 'ako': 'a', 'rinko': 'r', 'aya': 'aya', 'hina': 'hin', 'chisato': 'chi', 'maya': 'may', 'eve': 'eve', 'ran': 'ran', 'moca': 'moc', 'himari': 'him', 'tomoe': 'tom', 'tsugumi': 'tsu', 'kokoro': 'kok', 'kaoru': 'kao', 'hagumi': 'hag', 'kanon': 'kan', 'misaki': 'mis', 'marina': 'mar'}
+long = {'kasumi': 'kas', 'tae': 'tae', 'rimi': 'rim', 'saaya': 'say', 'arisa': 'ari',
+'yukina': 'y', 'sayo': 's', 'lisa': 'l', 'ako': 'a', 'rinko': 'r',
+'aya': 'aya', 'hina': 'hin', 'chisato': 'chi', 'maya': 'may', 'eve': 'eve',
+'ran': 'ran', 'moca': 'moc', 'himari': 'him', 'tomoe': 'tom', 'tsugumi': 'tsu',
+'kokoro': 'kok', 'kaoru': 'kao', 'hagumi': 'hag', 'kanon': 'kan', 'misaki': 'mis', 'marina': 'mar',
+'mashiro': 'mash', 'touko': 'tok', 'nanami': 'nan', 'tsukushi': 'tsuk', 'rui': 'rui'}
 
 parser = argparse.ArgumentParser(epilog='Default abbreviations: '+str(long))
 
@@ -41,4 +46,4 @@ def main(line, abb):
 		return line + '\n'
 
 with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
-	for line in f1: f2.write(  main( mystrip(line), args.short )  )
+	for line in f1: f2.write(  main( mystrip(line), args.abbrev )  )
