@@ -12,15 +12,15 @@ parser.add_argument('-e', '--expand', action='store_true', help='inserts wikicod
 
 args = parser.parse_args()
 
+#writeNew = ''
 skip = ['-'*10 + 'SKIPPED LINE' + '-'*10 + '}}\n', 0]
-names = ('kasumi', 'tae', 'rimi', 'saaya', 'arisa', 'yukina', 'sayo', 'lisa', 'ako', 'rinko', 'aya', 'hina', 'chisato', 'maya', 'eve', 'ran', 'moca', 'himari', 'tomoe', 'tsugumi', 'kokoro', 'kaoru', 'hagumi', 'kanon', 'misaki', 'marina')
+specialNames = {'Saya': 'Saaya', 'Toko': 'Touko'}
 
-def check_name(NAME):
-    name = NAME.lower()
-    if name in names:
-        return name
-    else:
-        return NAME
+def checkName(bestdoriName):
+    bandoriWikiName = bestdoriName
+    for name in specialNames.keys():
+        if name in bestdoriName: bandoriWikiName = bandoriWikiName.replace(name, specialNames[name])
+    return bandoriWikiName
 
 def process(line,f1,f2):
     global skip
@@ -31,7 +31,7 @@ def process(line,f1,f2):
     if tag == 0:
         f2.write( '{{loc|' + l + '}}\n' )
     elif tag == 1:
-        f2.write( '{{dialog|' + check_name(l) + '|' )
+        f2.write( '{{dialog|' + checkName(l) + '|' )
     elif tag == 2:
         try:
             f2.write( l.replace('@chariot', '{{USERNAME}}') + '}}\n')
@@ -86,7 +86,12 @@ class Bestdori_Parser(HTMLParser):
             self.name_div = False
             self.name_span = False
         elif self.dialog1 and self.dialog2:
-            self.transcript.append( (2, data.strip().replace('\n','') ) )
+            a = data.strip().replace('\n','#')
+            if '#' in a:
+                i = a.index('#')
+                if (a[i-1] == ' ') or (a[i+1] == ' '): a = a.replace('#', '')
+                else: a = a.replace('#', ' ')
+            self.transcript.append( (2, a) )
             self.dialog1 = False
             self.dialog2 = False
 
@@ -100,3 +105,4 @@ with open(args.path + '\\' + args.readname + '.txt', 'r', encoding='utf-8') as f
     bestdori_parser.feed( f1.read() )
 
     main(f1, f2, args.expand, bestdori_parser.get_transcript() )
+    
