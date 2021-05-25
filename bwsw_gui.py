@@ -4,9 +4,14 @@ from PyQt5.QtWidgets import (QPushButton, QWidget, QLabel, QLineEdit, QGridLayou
 from pathlib import Path
 from traceback import print_exc
 
-short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa', 'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko', 'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve', 'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi', 'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina'}
+short = {'kas':'kasumi', 'tae':'tae', 'rim':'rimi', 'say':'saaya', 'ari':'arisa',
+'y':'yukina', 's':'sayo', 'l':'lisa', 'a':'ako', 'r':'rinko',
+'aya':'aya', 'hin':'hina', 'chi':'chisato', 'may':'maya', 'eve':'eve',
+'ran':'ran', 'moc':'moca', 'him':'himari', 'tom':'tomoe', 'tsu':'tsugumi',
+'kok':'kokoro', 'kao':'kaoru', 'hag':'hagumi', 'kan':'kanon', 'mis':'misaki', 'mar':'marina',
+'mash': 'mashiro', 'tok': 'touko', 'nan': 'nanami', 'tsuk': 'tsukushi', 'rui': 'rui'}
 
-def process(NAME):
+def checkName(NAME):
     name = NAME.lower()
     if name in list(short.keys()):
         return short[name]
@@ -37,7 +42,7 @@ def main(f1, f2, expand):
                     if tag[1] == '':
                         writeNew = '{{dialog|others|[line]|' + tag[2] + '}}\n'
                     else:
-                        writeNew = '{{dialog|' + process(tag[1]) + '|[line]}}\n'
+                        writeNew = '{{dialog|' + checkName(tag[1]) + '|[line]}}\n'
                 else:
                     if tag[1] == '': f2.write('{{loc|' + tag[0] + '}}\n')
                     else: raise Slash
