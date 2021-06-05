@@ -9,11 +9,14 @@ parser.add_argument('-p', '--path', help="parent directory of files to read and 
 parser.add_argument('-r', '--readname', help='name of file to read from, default=transcript', default='source')
 parser.add_argument('-w', '--writename', help='name of file to write to, default=wikicode', default='wikicode')
 parser.add_argument('-e', '--expand', action='store_true', help='inserts wikicode to put story inside collapsible frame')
+parser.add_argument('-y', '--yourName', help='your username on bestdori', default='New Staff')
 
 args = parser.parse_args()
 
-#writeNew = ''
+YN = (not args.yourName == 'New Staff') * '@' + args.yourName
+
 skip = ['-'*10 + 'SKIPPED LINE' + '-'*10 + '}}\n', 0]
+
 specialNames = {'Saya': 'Saaya', 'Toko': 'Touko'}
 
 def checkName(bestdoriName):
@@ -34,7 +37,10 @@ def process(line,f1,f2):
         f2.write( '{{dialog|' + checkName(l) + '|' )
     elif tag == 2:
         try:
-            f2.write( l.replace('@chariot', '{{USERNAME}}') + '}}\n')
+            l = l.replace('Saya', 'Saaya')
+            l = l.replace('Toko', 'Touko')
+            l = l.replace(YN, '{{USERNAME}}')
+            f2.write( l + '}}\n')
         except UnicodeError:
             print('Possible special character. Check transcript file.')
             f2.write(skip[0])
@@ -105,4 +111,3 @@ with open(args.path + '\\' + args.readname + '.txt', 'r', encoding='utf-8') as f
     bestdori_parser.feed( f1.read() )
 
     main(f1, f2, args.expand, bestdori_parser.get_transcript() )
-    
