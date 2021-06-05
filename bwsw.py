@@ -17,6 +17,7 @@ parser.add_argument('-r', '--readname', help='name of file to read from, default
 parser.add_argument('-w', '--writename', help='name of file to write to, default=wikicode', default='wikicode')
 parser.add_argument('-a', '--abbrev', action='append', nargs=2, metavar=('ABBREVIATION','CHARACTER'), help='set a custom abbreviation for a name', default=list() )
 parser.add_argument('-e', '--expand', action='store_true', help='inserts wikicode to put story inside collapsible frame')
+parser.add_argument('-y', '--yourName', help='string to replace with {{USERNAME}} for special card stories', default='[you]')
 
 args = parser.parse_args()
 
@@ -27,10 +28,8 @@ if any(args.abbrev):
 def checkName(name):
     if name in list(short.keys()):
         return short[name]
-    elif name in list(short.values()):
-        return name
     else:
-        return NAME
+        return name
 
 class Slash(Exception): pass
 
@@ -68,7 +67,7 @@ def main(f1,f2,expand):
                 elif cont == '1':
                     f2.write('{{loc|' + l[:len(line)-1] + '}}\n')
                 elif cont == '2':
-                    f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san')) )
+                    f2.write( writeNew.replace('[line]', l.replace(args.yourName, '{{USERNAME}}-san')) )
                 else:
                     print('INVALID INPUT.')
                     f2.write(skip[0])
@@ -76,7 +75,7 @@ def main(f1,f2,expand):
                 continue
         else:
             try:
-                f2.write( writeNew.replace('[line]', l.replace('[you]', '{{USERNAME}}-san') ) )
+                f2.write( writeNew.replace('[line]', l.replace(args.yourName, '{{USERNAME}}-san') ) )
             except UnicodeError:
                 print('Possible special character. Check transcript file.')
                 f2.write(skip[0])
@@ -89,4 +88,3 @@ def main(f1,f2,expand):
 
 with open(args.path + '\\' + args.readname + '.txt', 'r') as f1, open(args.path + '\\' + args.writename + '.txt', 'w') as f2:
     main(f1,f2,args.expand)
-    
