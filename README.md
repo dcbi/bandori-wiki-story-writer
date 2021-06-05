@@ -36,6 +36,7 @@ Suppose you have a transcript already written. As long as it is in the same loca
 You can pass the following optional arguments to access additional features:
 - `--expand` includes wiki-code that will put the story inside a collapsible frame. On the wikia, this looks like a button that says `Expand` which hides the story before being clicked and displays the story after being clicked.
 - `--abbrev ABBREVIATION NAME` updates the default dictionary of character name abbreviations with a new key-value pair given by `{ABBREVIATION:CHARACTER}`. See below for the default abbreviations.
+- `--yourName YOUR_NAME` sets the string to recognize as the player name to be replace with ``{{USERNAME}}``.
 
 There is a version of the code with a label "\_gui" at the end of its name. It opens a window with a graphical user interface. If you do this, you don't need to pass any of the 5 arguments above because they will be handled by the GUI. The GUI requires the PyQt5 package. The GUI does not support custom abbreviations.
 
